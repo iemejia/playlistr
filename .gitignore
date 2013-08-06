@@ -33,3 +33,11 @@ nosetests.xml
 .mr.developer.cfg
 .project
 .pydevproject
+
+# project specific
+.m3u
+.pls
+
+# mac specific
+.DS_Store
+
