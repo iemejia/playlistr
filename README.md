@@ -14,6 +14,10 @@ use
     e.g.
     python playlistr.py transform playlist.m3u playlist-youtube.m3u
 
+You can then download the audio version of each song from your playlist:
+    
+    youtube-dl -x -a playlist-youtube.m3u
+
 notes
 -----
 
