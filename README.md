@@ -10,6 +10,10 @@ use
     e.g.
     python playlistr.py http://api.deezer.com/2.0/playlist/4341978 playlist.m3u
 
+    python playlistr.py transform PLAYLIST PLAYLIST_YOUTUBE
+    e.g.
+    python playlistr.py transform playlist.m3u playlist-youtube.m3u
+
 notes
 -----
 
