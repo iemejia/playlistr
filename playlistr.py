@@ -6,6 +6,7 @@ import argparse
 import codecs
 import json
 import socket
+from urlparse import urlsplit, parse_qs
 
 SPOTIFY_API_PREFIX = 'http://api.deezer.com/2.0/'
 YOUTUBE_API_PREFIX = 'https://gdata.youtube.com/feeds/api/videos?'
@@ -42,8 +43,8 @@ def write_youtube_playlist(urls, filename):
     write_m3u_file(filename, s)
 
 def get_youtube_video_id(url):
-    # TODO: this is a horrible hack, must be redone
-    return url[32:43]
+    query = parse_qs(urlsplit(url).query)
+    return query['v'][0]
 
 def youtube_getsong_url(songname):
     """ searchs for the first result in youtube (via relevant criteria) """

@@ -6,9 +6,9 @@ playlistr is an utility to import/export playlists from/to streaming services
 use
 ---
 
-    python playlistr.py URL file.m3u
+    python playlistr.py export URL file.m3u
     e.g.
-    python playlistr.py http://api.deezer.com/2.0/playlist/4341978 playlist.m3u
+    python playlistr.py export http://www.deezer.com/en/playlist/4341978 playlist.m3u
 
     python playlistr.py transform PLAYLIST PLAYLIST_YOUTUBE
     e.g.
