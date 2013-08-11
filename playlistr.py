@@ -15,13 +15,16 @@ M3U_HEADER = '#EXTM3U\n'
 M3U_TRACK = '#EXTINF:'
 EXT_MP3 = 'mp3'
 
+
 def extract_filenames(m3ufile):
     """ reads the file and ignores the # and strips the .mp3 extension """
     content = []
     with codecs.open(m3ufile, encoding='utf-8') as f:
         content = f.readlines()
-    filenames = [line.strip()[:-4] for line in content if not line.startswith('#')]
+    filenames = [line.strip()[:-4] for line in content
+                 if not line.startswith('#')]
     return filenames
+
 
 def download_with_youtubedl(m3ufile, filename):
     """ returns [filename] """
@@ -32,22 +35,26 @@ def download_with_youtubedl(m3ufile, filename):
     urls = []
     for i, f in enumerate(filenames):
         url = youtube_getsong_url(f)
-        video_id = get_youtube_video_id(url)
-        real_url = YOUTUBE_VIDEO_PREFIX + video_id
-        print('%3s / %3s - %s : %s' % (i+1, len(filenames), video_id, f))
-        urls.append(real_url)
+        if url:
+            video_id = get_youtube_video_id(url)
+            real_url = YOUTUBE_VIDEO_PREFIX + video_id
+            print('%3s / %3s - %s : %s' % (i+1, len(filenames), video_id, f))
+            urls.append(real_url)
     write_youtube_playlist(urls, filename)
+
 
 def write_youtube_playlist(urls, filename):
     s = '\n'.join(urls)
     write_m3u_file(filename, s)
 
+
 def get_youtube_video_id(url):
     query = parse_qs(urlsplit(url).query)
     return query['v'][0]
 
+
 def youtube_getsong_url(songname):
-    """ searchs for the first result in youtube (via relevant criteria) """
+    """ searchs for the first result in youtube (via relevant criteria)"""
     # example request to youtube api
     # https://gdata.youtube.com/feeds/api/videos?q=sonic%20youth%20-%20bull%20in%20the%20heather&orderby=viewCount&alt=json&max-results=1&v=2
     orderby = 'relevance'  # viewCount
@@ -70,17 +77,19 @@ def youtube_getsong_url(songname):
             print('error finding %s' % songname)
     except (compat_urllib_error.URLError, compat_http_client.HTTPException, socket.error) as err:
         print(u'unable to find song: %s' % songname)
-    return ''
+    return None
+
 
 def write_m3u_file(filename, s):
     f = open(filename, 'wb')
     f.write(s.encode('utf-8'))
     print('writing file %s' % filename)
 
+
 def write_m3u_playlist(dest, o):
     #EXTINF Track information, including runtime and title.
     #EXTINF:191,Artist Name - Track Title
-    print(json.dumps(o, sort_keys=True, indent=4, separators=(',', ': ')))
+    # print(json.dumps(o, sort_keys=True, indent=4, separators=(',', ': ')))
     tracks = o['tracks']['data']
     s = M3U_HEADER
     for t in tracks:
@@ -88,6 +97,7 @@ def write_m3u_playlist(dest, o):
         s += M3U_TRACK + str(t['duration']) + ',' + trackname + '\n' + \
             trackname + '.' + EXT_MP3 + '\n'
     write_m3u_file(dest, s)
+
 
 def resolve_url(url):
     # the webpage format for urls is like this:
@@ -124,4 +134,3 @@ if __name__ == '__main__':
         m3ufile = args.url
         filename = args.dest
         download_with_youtubedl(m3ufile, filename)
-
