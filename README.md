@@ -14,9 +14,19 @@ use
     e.g.
     python playlistr.py transform playlist.m3u playlist-youtube.m3u
 
-You can then download the audio version of each song from your playlist:
+You can then download and convert the audio version of each song from your playlist:
     
     youtube-dl -x -a playlist-youtube.m3u
+
+Anothyer alternative to preserve the audio quality and avoid transcoding:
+
+	youtube-dl -a playlist-youtube.m3u
+
+    # then in the folder when all the videos are:
+	for input in * 
+	do 
+	ffmpeg -i "$input" -vn -acodec copy "$input".m4a
+	done 
 
 notes
 -----
